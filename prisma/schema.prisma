@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Runback {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  episode      Int      @unique
+  season       Int
+  link         String?
+  date         DateTime @default(now())
+  trackOrder   String
+  topScreen    Race
+  bottomScreen Race
+}
+
+type Race {
+  driver String
+  items  String
+  kart   String
+  time   Int?
+  points Int?
+  times  Times
+}
+
+type Times {
+  luigiCircuit   Int?
+  peachBeach     Int?
+  babyPark       Int?
+  dryDryDesert   Int?
+  mushroomBridge Int?
+  marioCircuit   Int?
+  daisyCruiser   Int?
+  waluigiStadium Int?
+  sherbetLand    Int?
+  mushroomCity   Int?
+  yoshiCircuit   Int?
+  dkMountain     Int?
+  warioColosseum Int?
+  dinoDinoJungle Int?
+  bowsersCastle  Int?
+  rainbowRoad    Int?
+}
