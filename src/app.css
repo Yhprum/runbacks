@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: theme(colors.background);
+  color: theme(colors.text);
+  --border-color: theme("colors.secondary/.2");
+}
+
+table {
+  text-align: left;
+}
+
+table > * > tr > * {
+  padding: 0.5rem;
+}
+
+table > tbody > tr:first-of-type {
+  border-top: 1px solid theme(colors.accent);
+}
+
+table > tbody > tr:not(:first-of-type) {
+  border-top: 1px solid var(--border-color);
+}
+
+a {
+  color: theme(colors.secondary);
+}

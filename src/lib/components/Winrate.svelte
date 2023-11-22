@@ -1,11 +1,13 @@
 <script lang="ts">
   export let numerator: number;
   export let denominator: number;
+
+  export let units = "games";
 </script>
 
 <div>
   <div class="winrate">{((numerator / denominator) * 100).toFixed(0)}%</div>
-  <div class="light">{denominator} games</div>
+  <div class="light">{denominator} {units}</div>
 </div>
 
 <style>

@@ -5,7 +5,8 @@ export function timeToMs(time: string) {
   return arr[0] * 60 * 1000 + arr[1] * 1000 + arr[2];
 }
 
-export function msToTime(ms: number) {
+export function msToTime(ms: number | null) {
+  if (!ms) return "";
   const negative = ms < 0 ? "-" : "";
   ms = Math.abs(ms);
   const mins = Math.floor(ms / 1000 / 60);

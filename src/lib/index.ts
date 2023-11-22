@@ -10,9 +10,27 @@ players.forEach((driver) => {
 });
 export const teams = teamsArr;
 
-export const tracks = {
-  "Mushroom Cup": ["Luigi Circuit", "Peach Beach", "Baby Park", "Dry Dry Desert"],
-  "Flower Cup": ["Mushroom Bridge", "Mario Circuit", "Daisy Cruiser", "Waluigi Stadium"],
-  "Star Cup": ["Sherbet Land", "Mushroom City", "Yoshi Circuit", "DK Mountain"],
-  "Special Cup": ["Wario Colosseum", "Dino Dino Jungle", "Bowser's Castle", "Rainbow Road"],
+export const trackList = {
+  luigiCircuit: "Luigi Circuit",
+  peachBeach: "Peach Beach",
+  babyPark: "Baby Park",
+  dryDryDesert: "Dry Dry Desert",
+  mushroomBridge: "Mushroom Bridge",
+  marioCircuit: "Mario Circuit",
+  daisyCruiser: "Daisy Cruiser",
+  waluigiStadium: "Waluigi Stadium",
+  sherbetLand: "Sherbet Land",
+  mushroomCity: "Mushroom City",
+  yoshiCircuit: "Yoshi Circuit",
+  dkMountain: "DK Mountain",
+  warioColosseum: "Wario Colosseum",
+  dinoDinoJungle: "Dino Dino Jungle",
+  bowsersCastle: "Bowser's Castle",
+  rainbowRoad: "Rainbow Road",
 };
+
+export type Track = keyof typeof trackList;
+
+export const tracks = Object.keys(trackList) as unknown as Track;
+
+export const percent = (num: number) => (num * 100).toFixed(0) + "%";

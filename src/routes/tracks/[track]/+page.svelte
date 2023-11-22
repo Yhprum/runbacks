@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { players, trackList, tracks } from "$lib";
+  import { page } from "$app/stores";
+  import { players, trackList, type Track } from "$lib";
   import Kart from "$lib/components/Kart.svelte";
   import Winrate from "$lib/components/Winrate.svelte";
   import { msToTime } from "$lib/utils";
-  import type { LayoutServerData } from "../$types";
+  import type { LayoutServerData } from "../../$types";
 
   export let data: LayoutServerData;
+  const track = $page.params.track as Track;
+
+  const ordered = data.races.sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity));
 </script>
 
 <div class="container mx-auto">
@@ -26,22 +30,24 @@
               <td><a href={"/players/" + player}>{player}</a></td>
               <td>
                 <Winrate
-                  numerator={data.stats[player].driverTrackWins}
-                  denominator={data.stats[player].driverTracks}
+                  numerator={data.stats[player].tracks[track].driverTrackWins}
+                  denominator={data.stats[player].tracks[track].driverTracks}
                   units="tracks"
                 />
               </td>
               <td>
                 <Winrate
-                  numerator={data.stats[player].itemTrackWins}
-                  denominator={data.stats[player].itemTracks}
+                  numerator={data.stats[player].tracks[track].itemTrackWins}
+                  denominator={data.stats[player].tracks[track].itemTracks}
                   units="tracks"
                 />
               </td>
               <td>
                 <Winrate
-                  numerator={data.stats[player].driverTrackWins + data.stats[player].itemTrackWins}
-                  denominator={data.stats[player].driverTracks + data.stats[player].itemTracks}
+                  numerator={data.stats[player].tracks[track].driverTrackWins +
+                    data.stats[player].tracks[track].itemTrackWins}
+                  denominator={data.stats[player].tracks[track].driverTracks +
+                    data.stats[player].tracks[track].itemTracks}
                   units="tracks"
                 />
               </td>
@@ -49,6 +55,7 @@
           {/each}
         </tbody>
       </table>
+      <img class="mx-auto" src="/assets/tracks/{trackList[track]}.png" alt={track} />
       <table class="w-full">
         <thead>
           <tr>
@@ -69,7 +76,6 @@
       <table class="w-full">
         <thead>
           <tr>
-            <th>Track</th>
             <th>Driver</th>
             <th>Items</th>
             <th>Kart</th>
@@ -78,10 +84,8 @@
           </tr>
         </thead>
         <tbody>
-          {#each tracks as track}
-            {@const record = data.races.sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity))[0]}
+          {#each ordered as record}
             <tr>
-              <td><a href="tracks/{track}">{trackList[track]}</a></td>
               <td>{record.driver}</td>
               <td>{record.items}</td>
               <td><Kart kart={record.kart} /></td>

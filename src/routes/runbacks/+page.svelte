@@ -4,27 +4,7 @@
   import type { LayoutServerData } from "../$types";
 
   export let data: LayoutServerData;
-
-  const tableData = data.runbacks
-    .map((runback) => {
-      let winner: number;
-      if (runback.topScreen.time && runback.bottomScreen.time) {
-        winner = runback.topScreen.time > runback.bottomScreen.time ? 0 : 1;
-      }
-      return [runback.topScreen, runback.bottomScreen].map((screen, i) => ({
-        driver: screen.driver,
-        items: screen.items,
-        kart: screen.kart,
-        result: winner === i ? "win" : "lose",
-        time: screen.time,
-        points: screen.points,
-        ...screen.times,
-        episode: runback.episode,
-        season: runback.season,
-        link: runback.link,
-      }));
-    })
-    .flat();
+  const tableData = data.races;
 
   type RunbackTd = keyof (typeof tableData)[number];
 
@@ -118,64 +98,57 @@
   });
 </script>
 
-<table class="text-center" class:unsorted={sorting.length === 0}>
-  <thead>
-    <tr>
-      {#each columns as column}
-        <th on:click={(e) => setSort(e, column.accessorKey)}>
-          {column.header}
-          {#if sorting.find((s) => s.column === column.accessorKey)}
-            {sorting.find((s) => s.column === column.accessorKey)?.direction === 1 ? "⬇️" : "⬆️"}
-          {/if}
-        </th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#each processedData as row}
-      <tr class="border-t border-slate-300">
+<div class="h-[calc(100vh-50px)] overflow-auto">
+  <table class:unsorted={sorting.length === 0}>
+    <thead>
+      <tr>
         {#each columns as column}
-          <td>
-            {#if column.component}
-              <svelte:component this={column.component} {...column.props?.(row[column.accessorKey])} />
-            {:else if column.element}
-              <svelte:element this={column.element} {...column.props?.(row[column.accessorKey])}>
-                {column.value ? column.value(row[column.accessorKey]) : row[column.accessorKey]}
-              </svelte:element>
-            {:else}
-              {column.value ? column.value(row[column.accessorKey]) : row[column.accessorKey]}
+          <th on:click={(e) => setSort(e, column.accessorKey)}>
+            {column.header}
+            {#if sorting.find((s) => s.column === column.accessorKey)}
+              {sorting.find((s) => s.column === column.accessorKey)?.direction === 1 ? "⬇️" : "⬆️"}
             {/if}
-          </td>
+          </th>
         {/each}
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each processedData as row}
+        <tr>
+          {#each columns as column}
+            <td>
+              {#if column.component}
+                <svelte:component this={column.component} {...column.props?.(row[column.accessorKey])} />
+              {:else if column.element}
+                <svelte:element this={column.element} {...column.props?.(row[column.accessorKey])}>
+                  {column.value ? column.value(row[column.accessorKey]) : row[column.accessorKey]}
+                </svelte:element>
+              {:else}
+                {column.value ? column.value(row[column.accessorKey]) : row[column.accessorKey]}
+              {/if}
+            </td>
+          {/each}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
 
 <style>
-  table > :not(caption) > * > * {
-    padding: 0.35rem 0.5rem;
-  }
-
-  table > :not(:first-child),
-  table > :not(:first-child) {
-    border-top: 0;
-  }
-
   table > thead {
     position: sticky;
-    top: -1px;
-    background-color: #ffffff;
+    top: 0;
+    background-color: theme("colors.background");
     user-select: none;
   }
 
   table.unsorted > tbody > tr:nth-of-type(4n + 1),
   table.unsorted > tbody > tr:nth-of-type(4n + 2) {
-    background-color: whitesmoke;
+    background-color: theme("colors.text/0.1");
   }
 
   table:not(.unsorted) > tbody > tr:nth-of-type(2n + 1) {
-    background-color: whitesmoke;
+    background-color: theme("colors.text/0.1");
   }
 
   table th {
