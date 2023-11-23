@@ -16,7 +16,7 @@
       track: "Rainbow Road",
       item: "Big Banana",
       quote: "Big Banana",
-      context: "on obtaining a Big Banana",
+      context: "on throwing a Big Banana",
     },
     Derek: {
       kart: "Any Medium Kart",

@@ -25,7 +25,7 @@
 
 <div class="container mx-auto">
   <div class="flex flex-row">
-    <div class="flex-col px-4">
+    <div class="flex-col px-4 w-1/4">
       <table class="w-full text-center">
         <thead>
           <tr>

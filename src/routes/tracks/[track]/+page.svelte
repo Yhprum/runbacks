@@ -2,6 +2,7 @@
   import { page } from "$app/stores";
   import { players, trackList, type Track } from "$lib";
   import Kart from "$lib/components/Kart.svelte";
+  import Team from "$lib/components/Team.svelte";
   import Winrate from "$lib/components/Winrate.svelte";
   import { msToTime } from "$lib/utils";
   import type { LayoutServerData } from "../../$types";
@@ -10,6 +11,17 @@
   const track = $page.params.track as Track;
 
   const ordered = data.races.slice().sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity));
+
+  let fastestTime = Infinity;
+  const records = [];
+  data.runbacks.forEach((runback) => {
+    const screen =
+      runback.topScreen.times[track] < runback.bottomScreen.times[track] ? runback.topScreen : runback.bottomScreen;
+    if (screen.times[track] && screen.times[track] < fastestTime) {
+      fastestTime = screen.times[track];
+      records.unshift({ ...screen, episode: runback.episode });
+    }
+  });
 </script>
 
 <div class="container mx-auto">
@@ -59,16 +71,22 @@
       <table class="w-full">
         <thead>
           <tr>
-            <th colspan="3">Recent Records</th>
+            <th colspan="3">Record History</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Kart+Driver+Items</td>
-            <td>1:23.456 (-.002)</td>
-            <td>11/21/2023</td>
-            <td>ep.100</td>
-          </tr>
+          {#each records as record, i}
+            <tr>
+              <td><Team driver={record.driver} items={record.items} kart={record.kart} /></td>
+              <td>
+                {msToTime(record.times[track])}
+                {#if i < records.length - 1}
+                  ({((record.times[track] - records[i + 1].times[track]) / 1000).toFixed(3)})
+                {/if}
+              </td>
+              <td><a href="/runbacks/{record.episode}">ep. {record.episode}</a></td>
+            </tr>
+          {/each}
         </tbody>
       </table>
     </div>
@@ -90,7 +108,7 @@
               <td>{record.items}</td>
               <td><Kart kart={record.kart} /></td>
               <td>{msToTime(record[track])}</td>
-              <td><a href="runbacks/{record.episode}">ep. {record.episode}</a></td>
+              <td><a href="/runbacks/{record.episode}">ep. {record.episode}</a></td>
             </tr>
           {/each}
         </tbody>
