@@ -9,7 +9,7 @@
   export let data: LayoutServerData;
   const track = $page.params.track as Track;
 
-  const ordered = data.races.sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity));
+  const ordered = data.races.slice().sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity));
 </script>
 
 <div class="container mx-auto">

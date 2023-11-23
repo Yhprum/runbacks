@@ -49,6 +49,7 @@
           {/each}
         </tbody>
       </table>
+      <img class="mx-auto" src="/assets/cups/all.png" alt="All Cup" />
       <table class="w-full">
         <thead>
           <tr>
@@ -79,7 +80,7 @@
         </thead>
         <tbody>
           {#each tracks as track}
-            {@const record = data.races.sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity))[0]}
+            {@const record = data.races.slice().sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity))[0]}
             <tr>
               <td><a href="tracks/{track}">{trackList[track]}</a></td>
               <td>{record.driver}</td>

@@ -103,11 +103,12 @@
     <thead>
       <tr>
         {#each columns as column}
-          <th on:click={(e) => setSort(e, column.accessorKey)}>
+          <th
+            class:sort-asc={sorting.find((s) => s.column === column.accessorKey)?.direction === -1}
+            class:sort-desc={sorting.find((s) => s.column === column.accessorKey)?.direction === 1}
+            on:click={(e) => setSort(e, column.accessorKey)}
+          >
             {column.header}
-            {#if sorting.find((s) => s.column === column.accessorKey)}
-              {sorting.find((s) => s.column === column.accessorKey)?.direction === 1 ? "⬇️" : "⬆️"}
-            {/if}
           </th>
         {/each}
       </tr>
@@ -156,5 +157,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .sort-asc {
+    box-shadow: inset 0 2px 0 0 theme("colors.accent");
+  }
+
+  .sort-desc {
+    box-shadow: inset 0 -2px 0 0 theme("colors.accent");
   }
 </style>

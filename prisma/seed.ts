@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { data } from "./data";
+import { order, tracks } from "./order";
 
 const prisma = new PrismaClient();
 
@@ -15,7 +16,7 @@ async function main() {
         season: p1.season,
         episode: p1.runback,
         link: p1.link || null,
-        trackOrder: "LC,MB,WC,BP,BC,DDD,DDJ,MCR,DKM,WS,PB,MCT,YC,SL,DC,RR",
+        trackOrder: order[i + 1].map((track) => tracks[track]),
         topScreen: {
           driver: p1.driver,
           items: p1.items,
@@ -68,7 +69,7 @@ async function main() {
         },
       },
     });
-    console.log(`Created user with id: ${user.id}`);
+    console.log(`Created runback with id: ${user.id}`);
   }
   console.log(`Seeding finished.`);
 }
