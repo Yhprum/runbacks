@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { players, teams } from "$lib";
-import prisma from "$lib/prisma";
-import type { LayoutServerLoad } from "./$types";
+import pb from "$lib/db";
+import type { Runback } from "$lib/types";
+import type { LayoutLoad } from "./$types";
 
 export const load = (async () => {
-  const runbacks = await prisma.runback.findMany();
+  const runbacks = await pb.collection("Runbacks").getFullList<Runback>();
 
   const races = runbacks
     .map((runback) => {
@@ -102,4 +103,4 @@ export const load = (async () => {
   });
 
   return { runbacks, stats, races };
-}) satisfies LayoutServerLoad;
+}) satisfies LayoutLoad;

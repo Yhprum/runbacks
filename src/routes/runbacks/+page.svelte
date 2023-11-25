@@ -1,9 +1,9 @@
 <script lang="ts">
   import Kart from "$lib/components/Kart.svelte";
   import { msToTime } from "$lib/utils";
-  import type { LayoutServerData } from "../$types";
+  import type { LayoutData } from "../$types";
 
-  export let data: LayoutServerData;
+  export let data: LayoutData;
   const tableData = data.races;
 
   type RunbackTd = keyof (typeof tableData)[number];
