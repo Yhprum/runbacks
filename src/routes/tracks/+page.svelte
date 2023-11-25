@@ -1,11 +1,22 @@
 <script lang="ts">
   import { players, trackList, tracks } from "$lib";
   import Kart from "$lib/components/Kart.svelte";
+  import Team from "$lib/components/Team.svelte";
   import Winrate from "$lib/components/Winrate.svelte";
   import { msToTime } from "$lib/utils";
-  import type { LayoutServerData } from "../$types";
+  import { IconChevronLeft, IconChevronRight } from "@tabler/icons-svelte";
+  import type { LayoutData } from "./$types";
 
-  export let data: LayoutServerData;
+  export let data: LayoutData;
+
+  const allRecords = Object.values(data.trackRecords)
+    .toReversed()
+    .map((records) => records.map((record, i) => ({ ...record, i })))
+    .flat()
+    .sort((a, b) => b.episode - a.episode);
+
+  let page = 0;
+  $: records = allRecords.slice(5 * page, 5 * (page + 1));
 </script>
 
 <div class="container mx-auto">
@@ -49,20 +60,45 @@
           {/each}
         </tbody>
       </table>
-      <img class="mx-auto" src="/assets/cups/all.png" alt="All Cup" />
       <table class="w-full">
         <thead>
-          <tr>
-            <th colspan="3">Recent Records</th>
+          <tr class="align-bottom">
+            <th>Recent Records</th>
+            <th>
+              <img src="/assets/cups/all.png" alt="All Cup" />
+            </th>
+            {#if allRecords.length > 5}
+              <th>
+                <div class="flex flex-row items-end">
+                  <button disabled={page === 0} on:click={() => page--}>
+                    <IconChevronLeft size={20} />
+                  </button>
+                  {page + 1}
+                  <button disabled={page === Math.ceil(allRecords.length / 5 - 1)} on:click={() => page++}>
+                    <IconChevronRight size={20} />
+                  </button>
+                </div>
+              </th>
+            {/if}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Kart+Driver+Items</td>
-            <td>1:23.456 (-.002)</td>
-            <td>11/21/2023</td>
-            <td>ep.100</td>
-          </tr>
+          {#each records as record}
+            <tr>
+              <td><Team driver={record.driver} items={record.items} kart={record.kart} /></td>
+              <td class="flex flex-col">
+                <div><a href="/tracks/{record.track}">{trackList[record.track]}</a></div>
+                {msToTime(record.times[record.track])}
+                {#if record.i < data.trackRecords[record.track].length - 1}
+                  ({(
+                    (record.times[record.track] - data.trackRecords[record.track][record.i + 1].times[record.track]) /
+                    1000
+                  ).toFixed(3)})
+                {/if}
+              </td>
+              <td><a href="/runbacks/{record.episode}">ep. {record.episode}</a></td>
+            </tr>
+          {/each}
         </tbody>
       </table>
     </div>
@@ -95,3 +131,9 @@
     </div>
   </div>
 </div>
+
+<style>
+  button[disabled] {
+    opacity: 0;
+  }
+</style>

@@ -5,23 +5,17 @@
   import Team from "$lib/components/Team.svelte";
   import Winrate from "$lib/components/Winrate.svelte";
   import { msToTime } from "$lib/utils";
-  import type { LayoutServerData } from "../../$types";
+  import { IconChevronLeft, IconChevronRight } from "@tabler/icons-svelte";
+  import type { LayoutData } from "../$types";
 
-  export let data: LayoutServerData;
+  export let data: LayoutData;
   const track = $page.params.track as Track;
 
   const ordered = data.races.slice().sort((a, b) => (a[track] ?? Infinity) - (b[track] ?? Infinity));
 
-  let fastestTime = Infinity;
-  const records = [];
-  data.runbacks.forEach((runback) => {
-    const screen =
-      runback.topScreen.times[track] < runback.bottomScreen.times[track] ? runback.topScreen : runback.bottomScreen;
-    if (screen.times[track] && screen.times[track] < fastestTime) {
-      fastestTime = screen.times[track];
-      records.unshift({ ...screen, episode: runback.episode });
-    }
-  });
+  const allRecords = data.trackRecords[track];
+  let currentPage = 0;
+  $: records = allRecords.slice(5 * currentPage, 5 * (currentPage + 1));
 </script>
 
 <div class="container mx-auto">
@@ -67,11 +61,29 @@
           {/each}
         </tbody>
       </table>
-      <img class="mx-auto" src="/assets/tracks/{trackList[track]}.png" alt={track} />
       <table class="w-full">
         <thead>
-          <tr>
-            <th colspan="3">Record History</th>
+          <tr class="align-bottom">
+            <th>Record History</th>
+            <th>
+              <img src="/assets/tracks/{trackList[track]}.png" alt={track} />
+            </th>
+            {#if allRecords.length > 5}
+              <th>
+                <div class="flex flex-row items-end">
+                  <button disabled={currentPage === 0} on:click={() => currentPage--}>
+                    <IconChevronLeft size={20} />
+                  </button>
+                  {currentPage + 1}
+                  <button
+                    disabled={currentPage === Math.ceil(allRecords.length / 5 - 1)}
+                    on:click={() => currentPage++}
+                  >
+                    <IconChevronRight size={20} />
+                  </button>
+                </div>
+              </th>
+            {/if}
           </tr>
         </thead>
         <tbody>
@@ -80,8 +92,8 @@
               <td><Team driver={record.driver} items={record.items} kart={record.kart} /></td>
               <td>
                 {msToTime(record.times[track])}
-                {#if i < records.length - 1}
-                  ({((record.times[track] - records[i + 1].times[track]) / 1000).toFixed(3)})
+                {#if i < allRecords.length - 1}
+                  ({((record.times[track] - allRecords[i + 1].times[track]) / 1000).toFixed(3)})
                 {/if}
               </td>
               <td><a href="/runbacks/{record.episode}">ep. {record.episode}</a></td>
@@ -116,3 +128,9 @@
     </div>
   </div>
 </div>
+
+<style>
+  button[disabled] {
+    opacity: 0;
+  }
+</style>
