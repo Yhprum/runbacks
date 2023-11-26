@@ -12,6 +12,10 @@
 
   const timeRecord = data.races.reduce((best, cur) => ((cur.time ?? Infinity) < (best.time ?? Infinity) ? cur : best));
 
+  const trackTimes = Object.fromEntries(
+    Object.keys(trackList).map((track) => [track, data.races.map((race) => race[track])]),
+  );
+
   let liveData: Live;
   let chart: Chart;
   let ctx: any;
@@ -123,8 +127,14 @@
         <td>{msToTime(liveData.topScreenTimes.reduce((a, b) => a + b, 0))}</td>
         <td>{liveData.topScreen.points}</td>
         {#each liveData.topScreenTimes as time, i}
-          <td class:win={time < liveData.bottomScreenTimes[i]}>
+          {@const win = time < liveData.bottomScreenTimes[i]}
+          {@const placing =
+            trackTimes[liveData.trackOrder[i]].filter((trackTime) => trackTime < time).length + (win ? 1 : 2)}
+          <td class="relative" class:win class:record={placing === 1}>
             {msToTime(time)}
+            {#if placing <= 10}
+              <span class="absolute top-0 text-xs">{placing}</span>
+            {/if}
           </td>
         {/each}
       </tr>
@@ -135,8 +145,14 @@
         <td>{msToTime(liveData.bottomScreenTimes.reduce((a, b) => a + b, 0))}</td>
         <td>{liveData.bottomScreen.points}</td>
         {#each liveData.bottomScreenTimes as time, i}
-          <td class:win={time < liveData.topScreenTimes[i]}>
+          {@const win = time < liveData.topScreenTimes[i]}
+          {@const placing =
+            trackTimes[liveData.trackOrder[i]].filter((trackTime) => trackTime < time).length + (win ? 1 : 2)}
+          <td class="relative" class:win class:record={placing === 1}>
             {msToTime(time)}
+            {#if placing <= 10}
+              <span class="absolute top-0 text-xs">{placing}</span>
+            {/if}
           </td>
         {/each}
       </tr>
