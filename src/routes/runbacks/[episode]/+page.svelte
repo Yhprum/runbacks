@@ -3,7 +3,7 @@
   import { playerColors, trackList } from "$lib";
   import Kart from "$lib/components/Kart.svelte";
   import { msToTime } from "$lib/utils";
-  import Chart from "chart.js/auto";
+  import Chart, { type ChartDataset } from "chart.js/auto";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -23,21 +23,23 @@
     ]),
   );
 
-  const datasets = [data.runback.topScreen, data.runback.bottomScreen].map((runback, i) => {
-    let diff = 0;
-    const times = data.runback.trackOrder.map((track) => {
-      diff += runback.times[track] - timeRecord[track];
-      return diff;
-    });
-    return {
-      label: runback.driver + " + " + runback.items,
-      data: times,
-      fill: false,
-      backgroundColor: playerColors[runback.driver].replace("rgb", "rgba").replace(")", ",.5)"),
-      borderColor: playerColors[runback.driver],
-      pointStyle: false as const,
-    };
-  });
+  const datasets: ChartDataset<"line", number[]>[] = [data.runback.topScreen, data.runback.bottomScreen].map(
+    (runback) => {
+      let diff = 0;
+      const times = data.runback.trackOrder.map((track) => {
+        diff += runback.times[track] - timeRecord[track];
+        return diff;
+      });
+      return {
+        label: runback.driver + " + " + runback.items,
+        data: times,
+        fill: false,
+        backgroundColor: playerColors[runback.driver].replace("rgb", "rgba").replace(")", ",.5)"),
+        borderColor: playerColors[runback.driver],
+        pointStyle: false as const,
+      };
+    },
+  );
 
   datasets.push({
     label: `${timeRecord.driver} + ${timeRecord.items} (ep. ${timeRecord.episode})`,

@@ -4,7 +4,7 @@
   import pb from "$lib/db";
   import type { Live } from "$lib/types";
   import { msToTime } from "$lib/utils";
-  import Chart from "chart.js/auto";
+  import Chart, { type ChartDataset } from "chart.js/auto";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -47,7 +47,7 @@
 
   function makeChart(ctx, d: Live) {
     if (!d) return;
-    const datasets = [d.topScreen, d.bottomScreen].map((runback, i) => ({
+    const datasets: ChartDataset<"line", number[]>[] = [d.topScreen, d.bottomScreen].map((runback, i) => ({
       label: runback.driver + " + " + runback.items,
       data: calculateDiffs([d.topScreenTimes, d.bottomScreenTimes][i], d.trackOrder),
       fill: false,
