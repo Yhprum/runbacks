@@ -6,6 +6,7 @@ import type { LayoutLoad } from "./$types";
 
 export const load = (async () => {
   const runbacks = await pb.collection("Runbacks").getFullList<Runback>();
+  const isLive = (await pb.collection("IsLive").getOne("Live")).count === 1;
 
   const races = runbacks
     .map((runback) => {
@@ -102,5 +103,5 @@ export const load = (async () => {
     });
   });
 
-  return { runbacks, stats, races };
+  return { runbacks, stats, races, isLive };
 }) satisfies LayoutLoad;

@@ -1,9 +1,11 @@
 <script lang="ts">
   import { page } from "$app/stores";
+
+  export let isLive: boolean;
 </script>
 
 <nav>
-  <div class="container mx-auto">
+  <div class="container mx-auto flex flex-row">
     <ul>
       <li>
         <a href="/">
@@ -16,6 +18,18 @@
       <li><a href="/tracks" class:underline={$page.url.pathname === "/tracks"}>Tracks</a></li>
       <li><a href="/karts" class:underline={$page.url.pathname === "/karts"}>Karts</a></li>
       <li><a href="/graphs" class:underline={$page.url.pathname === "/graphs"}>Graphs</a></li>
+
+      {#if isLive && $page.url.pathname !== "/runbacks/live"}
+        <li>
+          <span class="ml-auto relative inline-flex">
+            <a href="/runbacks/live">Watch Live</a>
+            <span class="flex absolute h-2 w-2 top-0 right-0 -mr-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent/50 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+            </span>
+          </span>
+        </li>
+      {/if}
     </ul>
   </div>
 </nav>

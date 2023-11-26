@@ -37,10 +37,18 @@ interface Times {
   rainbowRoad: number | null;
 }
 
+interface LiveTeam {
+  driver: string;
+  items: string;
+  kart: string;
+  points: number | null;
+}
+
 export interface Live {
-  topScreen: Team;
-  bottomScreen: Team;
-  topScreenTimes: Times;
-  bottomScreenTimes: Times;
+  id: string;
+  topScreen: LiveTeam;
+  bottomScreen: LiveTeam;
+  topScreenTimes: number[];
+  bottomScreenTimes: number[];
   trackOrder: string[];
 }
