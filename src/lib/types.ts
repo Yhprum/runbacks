@@ -41,13 +41,14 @@ interface LiveTeam {
   driver: string;
   items: string;
   kart: string;
-  points: number | null;
 }
 
 export interface Live {
   id: string;
   topScreen: LiveTeam;
   bottomScreen: LiveTeam;
+  topScreenPoints: number;
+  bottomScreenPoints: number;
   topScreenTimes: number[];
   bottomScreenTimes: number[];
   trackOrder: string[];

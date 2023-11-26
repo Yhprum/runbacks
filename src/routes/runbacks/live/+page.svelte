@@ -125,7 +125,7 @@
         <td>{liveData.topScreen.items}</td>
         <td><Kart kart={liveData.topScreen.kart} /></td>
         <td>{msToTime(liveData.topScreenTimes.reduce((a, b) => a + b, 0))}</td>
-        <td>{liveData.topScreen.points}</td>
+        <td>{liveData.topScreenPoints}</td>
         {#each liveData.topScreenTimes as time, i}
           {@const win = time < liveData.bottomScreenTimes[i]}
           {@const placing =
@@ -143,7 +143,7 @@
         <td>{liveData.bottomScreen.items}</td>
         <td><Kart kart={liveData.bottomScreen.kart} /></td>
         <td>{msToTime(liveData.bottomScreenTimes.reduce((a, b) => a + b, 0))}</td>
-        <td>{liveData.bottomScreen.points}</td>
+        <td>{liveData.bottomScreenPoints}</td>
         {#each liveData.bottomScreenTimes as time, i}
           {@const win = time < liveData.topScreenTimes[i]}
           {@const placing =
