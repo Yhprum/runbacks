@@ -1,0 +1,9 @@
+services:
+  runbacks:
+    container_name: runbacks
+    build: .
+    volumes:
+      - $VOLUME_PATH/Runbacks/pb:/pb_data
+    ports:
+      - 6533:8090
+    restart: unless-stopped
