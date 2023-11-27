@@ -165,4 +165,3 @@ class Dolphin(object):
     def write_float(self, addr, val):
         assert addr >= 0x80000000
         return self.write_ram(addr - 0x80000000, pack(">f", val))
-    
