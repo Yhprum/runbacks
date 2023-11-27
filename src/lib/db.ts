@@ -1,5 +1,5 @@
 import PocketBase from "pocketbase";
 
-const pb = new PocketBase("http://192.168.0.243:8090");
+const pb = new PocketBase("https://runback-db.yhprum.com");
 
 export default pb;
