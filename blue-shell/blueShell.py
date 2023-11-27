@@ -46,7 +46,7 @@ if __name__ == "__main__":
             "topScreenTimes": [],
             "bottomScreenTimes": [],
             "topScreenPoints": 0,
-            "bottomScreenCode": 0,
+            "bottomScreenPoints": 0,
             "trackOrder": [],
         }
     )
