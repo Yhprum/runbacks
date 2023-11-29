@@ -9,6 +9,4 @@ const config = {
   }
 };
 
-config.paths = { base: process.argv.includes("dev") ? "" : "runbacks" };
-
 export default config;
