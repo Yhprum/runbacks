@@ -82,6 +82,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>ep. {$page.params.episode} - Runbacks</title>
+</svelte:head>
+
 <table class="w-full text-center">
   <thead>
     <tr>

@@ -33,6 +33,10 @@
   );
 </script>
 
+<svelte:head>
+  <title>Teams - Runbacks</title>
+</svelte:head>
+
 <div class="container mx-auto">
   <table class="w-full text-center">
     <thead>

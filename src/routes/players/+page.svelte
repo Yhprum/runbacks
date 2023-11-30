@@ -35,6 +35,10 @@
   };
 </script>
 
+<svelte:head>
+  <title>Players - Runbacks</title>
+</svelte:head>
+
 <div class="container m-auto grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
   {#each players as player}
     <button

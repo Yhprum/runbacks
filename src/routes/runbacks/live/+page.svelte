@@ -105,6 +105,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Live - Runbacks</title>
+</svelte:head>
+
 {#if liveData}
   <table class="w-full text-center">
     <thead>

@@ -23,6 +23,10 @@
   );
 </script>
 
+<svelte:head>
+  <title>{player} - Runbacks</title>
+</svelte:head>
+
 <div class="container mx-auto">
   <div class="flex flex-row">
     <div class="flex-col px-4 w-1/4">

@@ -66,6 +66,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Graphs - Runbacks</title>
+</svelte:head>
+
 <div class="h-[60vh]">
   <canvas bind:this={ctx} id="chart" />
 </div>

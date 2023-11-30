@@ -9,6 +9,10 @@
     "tier-cell tier-" + ["d", "c", "b", "a", "s"][kartTiers[stat].findIndex((tier) => tier.includes(kart.ranks[stat]))];
 </script>
 
+<svelte:head>
+  <title>Karts - Runbacks</title>
+</svelte:head>
+
 <div class="container mx-auto">
   <table class="w-full mb-4">
     <thead class="text-center">

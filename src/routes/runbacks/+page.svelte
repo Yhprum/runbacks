@@ -98,6 +98,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Runbacks</title>
+</svelte:head>
+
 <div class="h-[calc(100vh-50px)] overflow-auto">
   <table class:unsorted={sorting.length === 0}>
     <thead>

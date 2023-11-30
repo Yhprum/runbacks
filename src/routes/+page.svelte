@@ -13,6 +13,10 @@
     .slice(0, 5);
 </script>
 
+<svelte:head>
+  <title>Runbacks</title>
+</svelte:head>
+
 <div class="container mx-auto">
   <div class="flex flex-row">
     <div class="flex-col w-full px-4">

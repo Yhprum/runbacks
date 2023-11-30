@@ -18,6 +18,10 @@
   $: records = allRecords.slice(5 * currentPage, 5 * (currentPage + 1));
 </script>
 
+<svelte:head>
+  <title>{track} - Runbacks</title>
+</svelte:head>
+
 <div class="container mx-auto">
   <div class="flex flex-row">
     <div class="flex-row w-full px-4">
