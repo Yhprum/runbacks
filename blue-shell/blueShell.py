@@ -58,14 +58,14 @@ if __name__ == "__main__":
     p3_timer_address = 0x810B4B80
     current_track_address = 0x803CB6A8
 
-    num_tracks = 2  # 4 for single cup
+    num_tracks = 16  # 4 for single cup
     track_order = []
     times1 = copy.deepcopy(course_index)
     times2 = copy.deepcopy(course_index)
 
     # wait for first track to start
     RACE_STARTED = 5999999
-    while dolphin.read_uint32(p1_timer_address) != RACE_STARTED:# and dolphin.read_uint32(p3_timer_address) != RACE_STARTED:
+    while dolphin.read_uint32(p1_timer_address) != RACE_STARTED and dolphin.read_uint32(p3_timer_address) != RACE_STARTED:
         time.sleep(1)
 
     print("Grand Prix started")
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         { "trackOrder": track_order }
     )
     while len(track_order) <= num_tracks:
-        if dolphin.read_uint32(p1_timer_address) != RACE_STARTED:# and dolphin.read_uint32(p3_timer_address) != RACE_STARTED:
+        if dolphin.read_uint32(p1_timer_address) != RACE_STARTED and dolphin.read_uint32(p3_timer_address) != RACE_STARTED:
             p1_time = dolphin.read_uint32(p1_timer_address)
             p3_time = dolphin.read_uint32(p3_timer_address)
             times1[course_ids[track]] = p1_time
