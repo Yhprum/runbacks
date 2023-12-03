@@ -18,7 +18,7 @@
               ? 7
               : 10;
 
-  const placing = trackTimes.filter((trackTime) => trackTime < time).length + (win ? 1 : 2);
+  const placing = trackTimes.filter((trackTime) => trackTime && trackTime < time).length + (win ? 1 : 2);
 
   const ordinalRules = new Intl.PluralRules("en", { type: "ordinal" });
   const suffixes = {
