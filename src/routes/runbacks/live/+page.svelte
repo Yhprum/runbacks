@@ -1,6 +1,7 @@
 <script lang="ts">
   import { playerColors, trackList } from "$lib";
   import Kart from "$lib/components/Kart.svelte";
+  import TrackTime from "$lib/components/TrackTime.svelte";
   import pb from "$lib/db";
   import type { Live } from "$lib/types";
   import { msToTime } from "$lib/utils";
@@ -131,15 +132,11 @@
         <td>{msToTime(liveData.topScreenTimes.reduce((a, b) => a + b, 0))}</td>
         <td>{liveData.topScreenPoints}</td>
         {#each liveData.topScreenTimes as time, i}
-          {@const win = time < liveData.bottomScreenTimes[i]}
-          {@const placing =
-            trackTimes[liveData.trackOrder[i]].filter((trackTime) => trackTime < time).length + (win ? 1 : 2)}
-          <td class="relative" class:win class:record={placing === 1}>
-            {msToTime(time)}
-            {#if placing <= 10}
-              <span class="absolute top-0 text-xs">{placing}</span>
-            {/if}
-          </td>
+          <TrackTime
+            {time}
+            win={time < liveData.bottomScreenTimes[i]}
+            trackTimes={trackTimes[liveData.trackOrder[i]]}
+          />
         {/each}
       </tr>
       <tr>
@@ -149,15 +146,7 @@
         <td>{msToTime(liveData.bottomScreenTimes.reduce((a, b) => a + b, 0))}</td>
         <td>{liveData.bottomScreenPoints}</td>
         {#each liveData.bottomScreenTimes as time, i}
-          {@const win = time < liveData.topScreenTimes[i]}
-          {@const placing =
-            trackTimes[liveData.trackOrder[i]].filter((trackTime) => trackTime < time).length + (win ? 1 : 2)}
-          <td class="relative" class:win class:record={placing === 1}>
-            {msToTime(time)}
-            {#if placing <= 10}
-              <span class="absolute top-0 text-xs">{placing}</span>
-            {/if}
-          </td>
+          <TrackTime {time} win={time < liveData.topScreenTimes[i]} trackTimes={trackTimes[liveData.trackOrder[i]]} />
         {/each}
       </tr>
     </tbody>
@@ -166,13 +155,3 @@
 <div class="h-[60vh]">
   <canvas bind:this={ctx} id="chart" />
 </div>
-
-<style>
-  .win.record {
-    border: 3px solid theme("colors.text");
-  }
-  .win {
-    font-weight: 700;
-    background-color: theme("colors.accent" / 0.3);
-  }
-</style>

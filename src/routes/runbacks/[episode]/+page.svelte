@@ -2,6 +2,7 @@
   import { page } from "$app/stores";
   import { playerColors, trackList } from "$lib";
   import Kart from "$lib/components/Kart.svelte";
+  import TrackTime from "$lib/components/TrackTime.svelte";
   import { msToTime } from "$lib/utils";
   import Chart, { type ChartDataset } from "chart.js/auto";
   import { onMount } from "svelte";
@@ -107,12 +108,11 @@
       <td>{msToTime(data.runback.topScreen.time)}</td>
       <td>{data.runback.topScreen.points}</td>
       {#each data.runback.trackOrder as track}
-        <td
-          class:record={data.runback.topScreen.times[track] < trackRecords[track]}
-          class:win={data.runback.topScreen.times[track] < data.runback.bottomScreen.times[track]}
-        >
-          {msToTime(data.runback.topScreen.times[track])}
-        </td>
+        <TrackTime
+          time={data.runback.topScreen.times[track]}
+          win={data.runback.topScreen.times[track] < data.runback.bottomScreen.times[track]}
+          trackTimes={pastRaces.map((race) => race[track])}
+        />
       {/each}
     </tr>
     <tr>
@@ -122,12 +122,11 @@
       <td>{msToTime(data.runback.bottomScreen.time)}</td>
       <td>{data.runback.bottomScreen.points}</td>
       {#each data.runback.trackOrder as track}
-        <td
-          class:record={data.runback.bottomScreen.times[track] < trackRecords[track]}
-          class:win={data.runback.bottomScreen.times[track] < data.runback.topScreen.times[track]}
-        >
-          {msToTime(data.runback.bottomScreen.times[track])}
-        </td>
+        <TrackTime
+          time={data.runback.bottomScreen.times[track]}
+          win={data.runback.bottomScreen.times[track] < data.runback.topScreen.times[track]}
+          trackTimes={pastRaces.map((race) => race[track])}
+        />
       {/each}
     </tr>
   </tbody>
@@ -135,13 +134,3 @@
 <div class="h-[60vh]">
   <canvas bind:this={ctx} id="chart" />
 </div>
-
-<style>
-  .win.record {
-    border: 3px solid theme("colors.text");
-  }
-  .win {
-    font-weight: 700;
-    background-color: theme("colors.accent" / 0.3);
-  }
-</style>
