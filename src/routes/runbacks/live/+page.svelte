@@ -5,7 +5,7 @@
   import pb from "$lib/db";
   import type { Live } from "$lib/types";
   import { msToTime } from "$lib/utils";
-  import Chart, { type ChartDataset } from "chart.js/auto";
+  import Chart, { type ChartDataset, type ChartItem } from "chart.js/auto";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -19,7 +19,7 @@
 
   let liveData: Live;
   let chart: Chart;
-  let ctx: any;
+  let ctx: ChartItem;
 
   onMount(() => {
     pb.collection("Live")

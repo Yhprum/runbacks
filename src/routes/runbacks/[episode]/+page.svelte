@@ -4,14 +4,14 @@
   import Kart from "$lib/components/Kart.svelte";
   import TrackTime from "$lib/components/TrackTime.svelte";
   import { msToTime } from "$lib/utils";
-  import Chart, { type ChartDataset } from "chart.js/auto";
+  import Chart, { type ChartDataset, type ChartItem } from "chart.js/auto";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
 
   let chart: Chart;
-  let ctx: any;
+  let ctx: ChartItem;
 
   const pastRaces = data.races.slice(0, Math.max(Number($page.params.episode) - 1, 1) * 2);
 
