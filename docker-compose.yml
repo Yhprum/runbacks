@@ -13,8 +13,6 @@ services:
 
   runbacks-proxy:
     container_name: runbacks-proxy
-    image: nginx:alpine
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+    build: ./nginx
     ports:
       - 6533:80
