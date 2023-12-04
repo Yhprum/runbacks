@@ -78,22 +78,22 @@
     chart = new Chart(ctx, config);
   });
 
-  const description = `
-    ${data.runback.topScreen.driver} + ${data.runback.topScreen.items} (${data.runback.topScreen.kart})
-    ${data.runback.bottomScreen.driver} + ${data.runback.bottomScreen.items} (${data.runback.topScreen.kart})
-  `;
+  const description = `${data.runback.topScreen.driver} + ${data.runback.topScreen.items} (${data.runback.topScreen.kart}) vs. ${data.runback.bottomScreen.driver} + ${data.runback.bottomScreen.items} (${data.runback.topScreen.kart})`;
 </script>
 
 <svelte:head>
   <title>ep. {$page.params.episode} - Runbacks</title>
-  <meta property="og:title" content="Runback #{$page.params.episode}" />
+  <meta name="description" content={description}>
+
+  <meta property="og:title" content="Runback episode {$page.params.episode}" />
   <meta property="og:description" content={description} />
-  <meta property="og:type" content="video.movie" />
+  <meta property="og:type" content="website">
   <meta property="og:url" content="https://runbacks.yhprum.com/runbacks/{$page.params.episode}" />
   <meta
     property="og:image"
     content={`https://quickchart.io/chart?c=${JSON.stringify({ type: config.type, data: config.data })}`}
   />
+  <meta name="twitter:card" content="summary_large_image">
 </svelte:head>
 
 <table class="w-full text-center">
