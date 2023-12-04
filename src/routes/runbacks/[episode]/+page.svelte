@@ -4,7 +4,7 @@
   import Kart from "$lib/components/Kart.svelte";
   import TrackTime from "$lib/components/TrackTime.svelte";
   import { msToTime } from "$lib/utils";
-  import Chart, { type ChartDataset, type ChartItem } from "chart.js/auto";
+  import Chart, { type ChartConfiguration, type ChartDataset, type ChartItem } from "chart.js/auto";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -43,7 +43,7 @@
     pointStyle: false as const,
   });
 
-  const config = {
+  const config: ChartConfiguration<"line", number[], any> = {
     type: "line",
     data: {
       labels: data.runback.trackOrder.map((track) => trackList[track]),
