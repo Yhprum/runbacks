@@ -32,7 +32,7 @@
         <tbody>
           {#each players as player}
             <tr>
-              <td><a href={"/players/" + player}>{player}</a></td>
+              <td><a href="/players/{player}">{player}</a></td>
               <td>
                 <Winrate numerator={data.stats[player].driverWins} denominator={data.stats[player].driver} />
               </td>
@@ -70,7 +70,7 @@
               <td>{runback.items}</td>
               <td><Kart kart={runback.kart} /></td>
               <td>{msToTime(runback.time)}</td>
-              <td><a href={`/runbacks/${runback.episode}`}>ep. {runback.episode}</a></td>
+              <td><a href="/runbacks/{runback.episode}">ep. {runback.episode}</a></td>
             </tr>
           {/each}
         </tbody>

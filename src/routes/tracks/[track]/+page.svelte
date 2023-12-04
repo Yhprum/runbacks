@@ -37,7 +37,7 @@
         <tbody>
           {#each players as player}
             <tr>
-              <td><a href={"/players/" + player}>{player}</a></td>
+              <td><a href="/players/{player}">{player}</a></td>
               <td>
                 <Winrate
                   numerator={data.stats[player].tracks[track].driverTrackWins}
@@ -94,11 +94,15 @@
           {#each records as record, i}
             <tr>
               <td><Team driver={record.driver} items={record.items} kart={record.kart} /></td>
-              <td>
-                {msToTime(record.times[track])}
-                {#if i < allRecords.length - 1}
-                  ({((record.times[track] - allRecords[i + 1].times[track]) / 1000).toFixed(3)})
-                {/if}
+              <td class="flex flex-row">
+                <div class="flex flex-col">
+                  <div>{msToTime(record.times[track])}</div>
+                  {#if i < allRecords.length - 1}
+                    <div class="text-right">
+                      ({((record.times[track] - allRecords[i + 1].times[track]) / 1000).toFixed(3)})
+                    </div>
+                  {/if}
+                </div>
               </td>
               <td><a href="/runbacks/{record.episode}">ep. {record.episode}</a></td>
             </tr>

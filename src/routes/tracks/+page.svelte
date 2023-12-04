@@ -38,7 +38,7 @@
         <tbody>
           {#each players as player}
             <tr>
-              <td><a href={"/players/" + player}>{player}</a></td>
+              <td><a href="/players/{player}">{player}</a></td>
               <td>
                 <Winrate
                   numerator={data.stats[player].driverTrackWins}
@@ -90,15 +90,22 @@
           {#each records as record}
             <tr>
               <td><Team driver={record.driver} items={record.items} kart={record.kart} /></td>
-              <td class="flex flex-col">
-                <div><a href="/tracks/{record.track}">{trackList[record.track]}</a></div>
-                {msToTime(record.times[record.track])}
-                {#if record.i < data.trackRecords[record.track].length - 1}
-                  ({(
-                    (record.times[record.track] - data.trackRecords[record.track][record.i + 1].times[record.track]) /
-                    1000
-                  ).toFixed(3)})
-                {/if}
+              <td class="flex flex-row">
+                <a href="/tracks/{record.track}">
+                  <img src="/assets/tracks/{trackList[record.track]}.png" alt={trackList[record.track]} class="h-12" />
+                </a>
+                <div class="flex flex-col ml-2">
+                  <div>{msToTime(record.times[record.track])}</div>
+                  {#if record.i < data.trackRecords[record.track].length - 1}
+                    <div class="text-right">
+                      ({(
+                        (record.times[record.track] -
+                          data.trackRecords[record.track][record.i + 1].times[record.track]) /
+                        1000
+                      ).toFixed(3)})
+                    </div>
+                  {/if}
+                </div>
               </td>
               <td><a href="/runbacks/{record.episode}">ep. {record.episode}</a></td>
             </tr>
