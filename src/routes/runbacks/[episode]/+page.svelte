@@ -17,13 +17,6 @@
 
   const timeRecord = pastRaces.reduce((best, cur) => ((cur.time ?? Infinity) < (best.time ?? Infinity) ? cur : best));
 
-  const trackRecords = Object.fromEntries(
-    Object.keys(trackList).map((track) => [
-      track,
-      pastRaces.reduce((prev, cur) => (cur[track] && cur[track] < prev ? cur[track] : prev), Infinity),
-    ]),
-  );
-
   const datasets: ChartDataset<"line", number[]>[] = [data.runback.topScreen, data.runback.bottomScreen].map(
     (runback) => {
       let diff = 0;
@@ -45,46 +38,62 @@
   datasets.push({
     label: `${timeRecord.driver} + ${timeRecord.items} (ep. ${timeRecord.episode})`,
     data: Array(16).fill(0),
-    borderColor: "#ffe565",
+    borderColor: "rgb(255, 229, 101)",
     borderWidth: 2,
     pointStyle: false as const,
   });
 
+  const config = {
+    type: "line",
+    data: {
+      labels: data.runback.trackOrder.map((track) => trackList[track]),
+      datasets,
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        mode: "index",
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: (value) => msToTime(Number(value)),
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (context) => context.dataset.label + ": " + msToTime(context.parsed.y),
+          },
+        },
+      },
+    },
+  };
+
   onMount(() => {
-    chart = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: data.runback.trackOrder.map((track) => trackList[track]),
-        datasets,
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          intersect: false,
-          mode: "index",
-        },
-        scales: {
-          y: {
-            ticks: {
-              callback: (value) => msToTime(Number(value)),
-            },
-          },
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: (context) => context.dataset.label + ": " + msToTime(context.parsed.y),
-            },
-          },
-        },
-      },
-    });
+    console.log("Mount");
+    chart = new Chart(ctx, config);
   });
+
+  const description = `
+    ${data.runback.topScreen.driver} + ${data.runback.topScreen.items} (${data.runback.topScreen.kart})
+    ${data.runback.bottomScreen.driver} + ${data.runback.bottomScreen.items} (${data.runback.topScreen.kart})
+  `;
 </script>
 
 <svelte:head>
   <title>ep. {$page.params.episode} - Runbacks</title>
+  <meta property="og:title" content="Runback #{$page.params.episode}" />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="video.movie" />
+  <meta property="og:url" content="https://runbacks.yhprum.com/runbacks/{$page.params.episode}" />
+  <meta
+    property="og:image"
+    content={`https://quickchart.io/chart?c=${JSON.stringify({ type: config.type, data: config.data })}`}
+  />
 </svelte:head>
 
 <table class="w-full text-center">
