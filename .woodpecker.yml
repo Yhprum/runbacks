@@ -1,13 +1,14 @@
 when:
   branch: main
+  event: [push, manual]
 
 steps:
   deploy:
     image: docker/compose:alpine-1.29.2
     environment:
-      - VOLUME_PATH=$VOLUME_PATH
+      VOLUME_PATH:
+        from_secret: VOLUME_PATH
     commands:
       - docker-compose up -d --build
-    secrets: [volume_path]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
