@@ -3,6 +3,8 @@ services:
     container_name: runbacks
     build: .
     restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
 
   runbacks-db:
     container_name: runbacks-db
@@ -10,9 +12,13 @@ services:
     volumes:
       - $VOLUME_PATH/Runbacks/pb:/pb_data
     restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
 
   runbacks-proxy:
     container_name: runbacks-proxy
     build: ./nginx
     ports:
       - 6533:80
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
